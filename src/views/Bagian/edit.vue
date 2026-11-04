@@ -100,8 +100,8 @@ onBeforeUnmount(() => {
   <main>
     <div class="container-fluid">
       <div
-        class="gambar-footer page-header min-height-300"
-        style="margin-top: -24px; margin-right: -48px; margin-left: -34%"
+        class="gambar-footer page-header min-height-250 border-radius-xl"
+        style="margin-top: -12px;"
       >
         <span class="mask bg-gradient-success opacity-6"></span>
       </div>
@@ -130,9 +130,9 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <div class="py-4 container-fluid">
-      <div class="row">
-        <div class="col-md-8">
-          <div class="card">
+      <div class="row g-4">
+        <div class="col-12 col-lg-8 order-2 order-lg-1">
+          <div class="card border-0 shadow-sm">
             <div class="card-header pb-0">
               <h6>Bagian Information</h6>
               <!-- Search Form -->
@@ -271,7 +271,7 @@ onBeforeUnmount(() => {
             </nav>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-12 col-lg-4 order-1 order-lg-2">
           <EditBagian />
         </div>
       </div>

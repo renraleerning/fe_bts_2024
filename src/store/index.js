@@ -2,14 +2,14 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    hideConfigButton: false,
+    hideConfigButton: true,
     isPinned: false,
     showConfig: false,
     sidebarType: "bg-white",
     isRTL: false,
     mcolor: "",
     darkMode: false,
-    isNavFixed: false,
+    isNavFixed: true,
     isAbsolute: false,
     showNavs: true,
     showSidenav: true,
