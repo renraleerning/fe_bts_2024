@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const Api = axios.create({
     //set default endpoint API
-    baseURL: 'http://localhost:8000'
+    baseURL: 'https://bbts.smkn2sumedang.sch.id'
 });
 
 // Otomatis lampirkan token Authorization jika sudah login
