@@ -21,10 +21,34 @@ const Api = axios.create({
 export const getStorageUrl = (path) => {
     if (!path) return '';
     if (typeof path !== 'string') return '';
-    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
+    if (path.startsWith('data:')) return path;
+
+    // Filter keluar jika path hanya berupa direktori kosong (misal: "http://.../storage/user/")
+    const trimmed = path.trim().replace(/\/+$/, '');
+    if (
+        trimmed.endsWith('/storage/user') ||
+        trimmed.endsWith('/storage/tamu') ||
+        trimmed.endsWith('/storage/event_banner') ||
+        trimmed.endsWith('/storage/lampiran') ||
+        trimmed.endsWith('/storage/tamu_event')
+    ) {
+        return '';
+    }
+
+    const cleanBase = API_BASE_URL.replace(/\/+$/, '');
+
+    // Jika path di-generate oleh accessor Laravel backend dengan localhost / 127.0.0.1 (karena APP_URL default)
+    if (path.includes('localhost') || path.includes('127.0.0.1')) {
+        const storageIndex = path.indexOf('/storage/');
+        if (storageIndex !== -1) {
+            return `${cleanBase}${path.substring(storageIndex)}`;
+        }
+    }
+
+    if (path.startsWith('http://') || path.startsWith('https://')) {
         return path;
     }
-    const cleanBase = API_BASE_URL.replace(/\/+$/, '');
+
     const cleanPath = path.replace(/^\/+/, '');
     if (cleanPath.startsWith('storage/')) {
         return `${cleanBase}/${cleanPath}`;
