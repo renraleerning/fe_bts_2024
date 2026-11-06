@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import api from "../../api";
+import api, { getStorageUrl } from "../../api";
 import { getStoredUser, setStoredUser } from "@/utils/auth";
 
 const router = useRouter();
@@ -61,16 +61,7 @@ const handleFileChange = (e) => {
 // Safe Photo URL Resolver
 const resolvePhotoUrl = (url) => {
   if (!url) return null;
-  if (typeof url === "string" && url.startsWith("http://localhost/storage/")) {
-    return url.replace("http://localhost/storage/", "http://localhost:8000/storage/");
-  }
-  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
-    return url;
-  }
-  if (url.startsWith("/")) {
-    return `http://localhost:8000${url}`;
-  }
-  return `http://localhost:8000/storage/${url}`;
+  return getStorageUrl(url);
 };
 
 // Load detail data

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import api from "../../api";
+import api, { getStorageUrl } from "../../api";
 
 // Router & Route
 const router = useRouter();
@@ -66,13 +66,7 @@ const getError = (field) => {
 // Safe Photo URL Resolver
 const resolvePhotoUrl = (url) => {
   if (!url) return null;
-  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
-    return url;
-  }
-  if (url.startsWith("/")) {
-    return `http://localhost:8000${url}`;
-  }
-  return `http://localhost:8000/storage/${url}`;
+  return getStorageUrl(url);
 };
 
 // Safe Lampiran URL Resolver
@@ -80,13 +74,7 @@ const resolveLampiranUrl = (item) => {
   if (!item) return null;
   const path = typeof item === "object" ? item.file : item;
   if (!path) return null;
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path;
-  }
-  if (path.startsWith("/")) {
-    return `http://localhost:8000${path}`;
-  }
-  return `http://localhost:8000/storage/${path}`;
+  return getStorageUrl(path);
 };
 
 // File info helper

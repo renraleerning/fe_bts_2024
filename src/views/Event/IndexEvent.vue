@@ -1,7 +1,7 @@
 <script setup>
 /* eslint-disable */
 import { ref, onMounted } from "vue";
-import api from "@/api";
+import api, { getStorageUrl, getApiUrl } from "@/api";
 import Swal from "sweetalert2";
 import QRCode from "qrcode";
 
@@ -167,11 +167,7 @@ const bannerFileInput = ref(null);
 
 const getBannerUrl = (bannerPath) => {
   if (!bannerPath) return "";
-  if (bannerPath.startsWith("http://") || bannerPath.startsWith("https://")) {
-    return bannerPath;
-  }
-  const base = api.defaults.baseURL || "http://localhost:8000";
-  return `${base}/storage/event_banner/${bannerPath}`;
+  return getStorageUrl(`event_banner/${bannerPath}`);
 };
 
 const handleBannerChange = (e) => {
@@ -640,8 +636,7 @@ const deleteEvent = async (event) => {
 
 // Download Excel
 const downloadExcel = (event) => {
-  const url = `${api.defaults.baseURL || "http://localhost:8000"}/api/event/${event.id}/export-excel`;
-  window.open(url, "_blank");
+  window.open(getApiUrl(`/api/event/${event.id}/export-excel`), "_blank");
 };
 
 onMounted(() => {

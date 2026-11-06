@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import api from "../../api";
+import api, { getStorageUrl } from "../../api";
 import { saveAs } from "file-saver";
 
 // State
@@ -149,18 +149,7 @@ const exportData = async () => {
 
 // Safe Photo URL Resolver
 const getPhotoUrl = (photoPath) => {
-  if (!photoPath) return "";
-  if (
-    photoPath.startsWith("http://") ||
-    photoPath.startsWith("https://") ||
-    photoPath.startsWith("data:image")
-  ) {
-    return photoPath;
-  }
-  if (photoPath.startsWith("/")) {
-    return `http://localhost:8000${photoPath}`;
-  }
-  return `http://localhost:8000/storage/${photoPath}`;
+  return getStorageUrl(photoPath);
 };
 
 // Safe Lampiran URL Resolver
@@ -170,14 +159,7 @@ const getLampiranUrl = (tamu) => {
     tamu.lampiran?.file ||
     (typeof tamu.lampiran === "string" ? tamu.lampiran : null) ||
     tamu.file;
-  if (!fileUrl) return null;
-  if (fileUrl.startsWith("http://") || fileUrl.startsWith("https://")) {
-    return fileUrl;
-  }
-  if (fileUrl.startsWith("/")) {
-    return `http://localhost:8000${fileUrl}`;
-  }
-  return `http://localhost:8000/storage/${fileUrl}`;
+  return getStorageUrl(fileUrl);
 };
 
 // Image modal preview state

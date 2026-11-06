@@ -1,7 +1,7 @@
 <script setup>
 /* eslint-disable */
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import api from "@/api";
+import api, { getStorageUrl } from "@/api";
 import Swal from "sweetalert2";
 
 const props = defineProps({
@@ -414,11 +414,7 @@ const showFlyerModal = ref(false);
 
 const getBannerUrl = (bannerPath) => {
   if (!bannerPath) return "";
-  if (bannerPath.startsWith("http://") || bannerPath.startsWith("https://")) {
-    return bannerPath;
-  }
-  const base = api.defaults.baseURL || "http://localhost:8000";
-  return `${base}/storage/event_banner/${bannerPath}`;
+  return getStorageUrl(`event_banner/${bannerPath}`);
 };
 
 onMounted(() => {

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import api from "../../api";
+import api, { getStorageUrl } from "../../api";
 
 // State
 const users = ref([]);
@@ -82,18 +82,7 @@ const prevPage = () => {
 
 // Photo URL helper
 const getPhotoUrl = (photoPath) => {
-  if (!photoPath) return "";
-  if (
-    photoPath.startsWith("http://") ||
-    photoPath.startsWith("https://") ||
-    photoPath.startsWith("data:image")
-  ) {
-    return photoPath;
-  }
-  if (photoPath.startsWith("/")) {
-    return `http://localhost:8000${photoPath}`;
-  }
-  return `http://localhost:8000/storage/${photoPath}`;
+  return getStorageUrl(photoPath);
 };
 
 // Image modal preview state

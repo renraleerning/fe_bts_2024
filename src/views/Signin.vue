@@ -2,7 +2,7 @@
 import { onBeforeUnmount, onBeforeMount, onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import api, { getStorageUrl } from "@/api";
 
 import bgSekolah from "@/assets/img/sekolah3.png";
 import logoSmk from "@/assets/img/logosmk.png";
@@ -82,8 +82,8 @@ const login = async () => {
   loading.value = true;
 
   try {
-    const response = await axios.post(
-      "http://localhost:8000/api/login",
+    const response = await api.post(
+      "/api/login",
       {
         username: user.value.username.trim(),
         password: user.value.password,
@@ -204,7 +204,7 @@ onMounted(async () => {
 
   // Check if an event is currently active
   try {
-    const res = await axios.get("http://localhost:8000/api/event/active");
+    const res = await api.get("/api/event/active");
     activeEvent.value = res.data?.data || null;
   } catch (e) {
     activeEvent.value = null;
@@ -213,10 +213,7 @@ onMounted(async () => {
 
 const getBannerUrl = (bannerPath) => {
   if (!bannerPath) return "";
-  if (bannerPath.startsWith("http://") || bannerPath.startsWith("https://")) {
-    return bannerPath;
-  }
-  return `http://localhost:8000/storage/event_banner/${bannerPath}`;
+  return getStorageUrl(`event_banner/${bannerPath}`);
 };
 
 onBeforeUnmount(() => {

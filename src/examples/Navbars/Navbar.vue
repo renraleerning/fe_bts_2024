@@ -2,7 +2,7 @@
 import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import api from "@/api";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import { activateDarkMode, deactivateDarkMode } from "@/assets/js/dark-mode";
 
@@ -62,8 +62,8 @@ const updateClock = () => {
   }
 };
 
-// Global axios interceptor untuk menangani token kadaluarsa
-axios.interceptors.response.use(
+// Global api interceptor untuk menangani token kadaluarsa
+api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
@@ -83,11 +83,7 @@ const fetchCurrentUser = async () => {
   }
 
   try {
-    const response = await axios.get("http://localhost:8000/api/user", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.get("/api/user");
     if (response && response.data) {
       user.value = response.data;
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -115,23 +111,16 @@ const logout = async () => {
 
   try {
     if (token) {
-      await axios.post(
-        "http://localhost:8000/api/logout",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          timeout: 3000,
-        }
-      );
+      await api.post("/api/logout", {}, { timeout: 3000 });
     }
   } catch (error) {
     console.warn("Backend logout info:", error?.response?.data || error.message);
   } finally {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    delete axios.defaults.headers.common["Authorization"];
+    if (api.defaults.headers.common["Authorization"]) {
+      delete api.defaults.headers.common["Authorization"];
+    }
     user.value = null;
     showMenu.value = false;
     loggingOut.value = false;

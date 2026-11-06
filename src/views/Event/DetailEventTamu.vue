@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import api from "@/api";
+import api, { getStorageUrl, getApiUrl } from "@/api";
 import Swal from "sweetalert2";
 import QRCode from "qrcode";
 
@@ -107,8 +107,7 @@ const prevPage = () => {
 
 // Download Excel
 const downloadExcel = () => {
-  const url = `${api.defaults.baseURL || "http://localhost:8000"}/api/event/${eventId}/export-excel`;
-  window.open(url, "_blank");
+  window.open(getApiUrl(`/api/event/${eventId}/export-excel`), "_blank");
 };
 
 // QR Code Stand State & Methods
@@ -343,15 +342,13 @@ const closeSignature = () => {
 // Resolve Photo URL
 const getPhotoUrl = (fileName) => {
   if (!fileName) return null;
-  const base = api.defaults.baseURL || "http://localhost:8000";
-  return `${base}/storage/tamu_event/${fileName}`;
+  return getStorageUrl(`tamu_event/${fileName}`);
 };
 
 // Resolve Signature URL
 const getSignatureUrl = (fileName) => {
   if (!fileName) return null;
-  const base = api.defaults.baseURL || "http://localhost:8000";
-  return `${base}/storage/tamu_event/${fileName}`;
+  return getStorageUrl(`tamu_event/${fileName}`);
 };
 
 onMounted(() => {
